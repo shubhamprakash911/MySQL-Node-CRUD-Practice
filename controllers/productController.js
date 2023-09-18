@@ -33,4 +33,43 @@ const getProductById = asyncHandler(async (req, res) => {
   res.json({ message: "Get a product successfully by id", data: product });
 });
 
-module.exports = { createProduct, getAllProducts, getProductById };
+// @desc   Delete product by id
+// @route  Delete /api/prodcut/:id
+// @access Public/Admin
+const deleteProduct = asyncHandler(async (req, res) => {
+  const data = await Product.destroy({
+    where: { id: req.params.id },
+  });
+  res.json({ message: "A product delete successfully", data });
+});
+
+// @desc   Update product by id
+// @route  Put /api/prodcut/:id
+// @access Public/Admin
+const updateProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findOne({
+    where: { id: req.params.id },
+  });
+
+  if (!product) {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+
+  const { name, description, price } = req.body;
+
+  product.name = name || product.name;
+  product.price = price || product.price;
+  product.description = description || product.description;
+
+  await product.save();
+  res.json({ message: "A product updated successfully", data: product });
+});
+
+module.exports = {
+  createProduct,
+  getAllProducts,
+  getProductById,
+  deleteProduct,
+  updateProduct,
+};
