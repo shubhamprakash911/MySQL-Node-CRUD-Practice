@@ -27,7 +27,7 @@ app.use(errorHandler);
 async function conn() {
   try {
     await sequelize.authenticate();
-    await sequelize.sync();
+    await sequelize.sync({ alter: true });
     console.log("Database connection has been established successfully.");
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

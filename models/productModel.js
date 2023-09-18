@@ -14,6 +14,6 @@ const Product = sequelize.define("Product", {
   },
 });
 
-Product.belongsTo(User);
+Product.belongsTo(User, { foreignKey: "userId" });
 
 module.exports = Product;

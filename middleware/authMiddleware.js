@@ -30,7 +30,7 @@ const authorization = (permitedRole) => {
       next();
     } else {
       res.status(401);
-      throw new Error("Not authorized as ", req.user?.role);
+      throw new Error(`${req.user?.role} is not authorized to access this`);
     }
   };
 };
