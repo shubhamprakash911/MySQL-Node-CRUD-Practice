@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/db");
+const User = require("./userModel");
 
 const Product = sequelize.define("Product", {
   name: {
@@ -12,5 +13,7 @@ const Product = sequelize.define("Product", {
     allowNull: false,
   },
 });
+
+Product.belongsTo(User);
 
 module.exports = Product;

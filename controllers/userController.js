@@ -7,7 +7,7 @@ const generateToken = require("../utils/generateToken");
 // @route  POST /api/users/register
 // @access public
 const userRegister = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, role } = req.body;
 
   const userExist = await User.findOne({ where: { email } });
   if (userExist) {
@@ -15,15 +15,14 @@ const userRegister = asyncHandler(async (req, res, next) => {
     throw new Error("User already exists");
   }
   const hashPassword = bcrypt.hashSync(password, 5);
-  const user = User.create({ email, password: hashPassword });
+  const user = await User.create({ email, password: hashPassword, role });
+
   generateToken(res, user.id);
-  res
-    .status(200)
-    .json({
-      status: true,
-      message: "Register user successfully",
-      data: { id: user.id, email: user.email },
-    });
+  res.status(200).json({
+    status: true,
+    message: "Register user successfully",
+    data: { id: user.id, email: user.email, role: user.role },
+  });
 });
 
 // @desc   Login a user
@@ -32,6 +31,7 @@ const userRegister = asyncHandler(async (req, res, next) => {
 const userLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ where: { email } });
+  console.log(user, "userLogin");
 
   if (user === null) {
     res.status(400);
@@ -48,7 +48,7 @@ const userLogin = asyncHandler(async (req, res) => {
   res.json({
     status: true,
     message: "user login successfully",
-    data: { id: user.id, email: user.email },
+    data: { id: user.id, email: user.email, role: user.role },
   });
 });
 

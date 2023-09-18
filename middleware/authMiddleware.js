@@ -35,4 +35,4 @@ const authorization = (permitedRole) => {
   };
 };
 
-module.exports = { protect };
+module.exports = { protect, authorization };
